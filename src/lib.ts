@@ -1,4 +1,3 @@
-import { IEmitter } from '@bettercorp/service-base/lib/ILib';
 import _AXIOS from 'axios';
 const AXIOS = _AXIOS as any;
 const SERVER_PATH = 'https://rest.smsportal.com/v1';
@@ -15,9 +14,6 @@ export interface IMessage {
 export interface ISMSData {
   data: Array<IMessage>;
   server: ICredentials;
-}
-export interface ISMSEmitter extends IEmitter {
-  data: ISMSData;
 }
 
 // tslint:disable-next-line: max-line-length

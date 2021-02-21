@@ -2,7 +2,7 @@ import { IPlugin, PluginFeature } from '@bettercorp/service-base/lib/ILib';
 import { Tools } from '@bettercorp/tools/lib/Tools';
 import moment = require('moment');
 import { ISMSPortalEvents } from '../../events';
-import { ICredentials, ISMSEmitter, webRequest as CWR } from '../../lib';
+import { ICredentials, ISMSData, webRequest as CWR } from '../../lib';
 
 interface ISession {
   username: string;
@@ -63,26 +63,26 @@ export class Plugin implements IPlugin {
   init (features: PluginFeature): Promise<void> {
     const self = this;
     return new Promise((resolve) => {
-      features.onEvent(null, ISMSPortalEvents.SendSMS, async (arg: ISMSEmitter) => {
-        if (Tools.isNullOrUndefined(arg.data) || Tools.isNullOrUndefined(arg.data.server) || Tools.isNullOrUndefined(arg.data.server.username) || Tools.isNullOrUndefined(arg.data.server.password)) {
-          return features.emitEvent(null, arg.resultNames.error, 'Undefined variables passed in!');
+      features.onReturnableEvent(null, ISMSPortalEvents.SendSMS, async (resolve: Function, reject: Function, data: ISMSData) => {
+        if (Tools.isNullOrUndefined(data) || Tools.isNullOrUndefined(data.server) || Tools.isNullOrUndefined(data.server.username) || Tools.isNullOrUndefined(data.server.password)) {
+          return reject('Undefined variables passed in!');
         }
 
-        const authToken = await self.authenticate(arg.data.server);
+        const authToken = await self.authenticate(data.server);
         CWR('/bulkmessages',
           'POST',
           undefined,
           {
-            Messages: arg.data.data
+            Messages: data.data
           },
           {
             headers: {
               'Authorization': `Bearer ${authToken}`
             }
           }).then(x => {
-            features.emitEvent(null, arg.resultNames.success, x);
+            resolve(x);
           }).catch(x => {
-            features.emitEvent(null, arg.resultNames.error, x);
+            reject(x);
           });
       });
 
