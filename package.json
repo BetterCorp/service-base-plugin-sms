@@ -2,7 +2,7 @@
   "name": "@bettercorp/service-base-plugin-sms",
   "license": "AGPL-3.0-only",
   "repository": {
-    "url": "https://gitlab.com/BetterCorp/public/service-base-plugin-sms"
+    "url": "https://github.com/BetterCorp/service-base-plugin-sms"
   },
   "scripts": {
     "dev": "nodemon -L --watch src/**/*.ts --watch plugins/**/*.ts --exec ts-node src/index.ts",
