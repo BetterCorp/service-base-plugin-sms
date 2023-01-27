@@ -1,0 +1,6 @@
+{
+  "key": "service-sms-portal",
+  "name": "SMS Portal",
+  "icon": "sms-portal.png",
+  "description": "SMSPortal.com integration"
+}
