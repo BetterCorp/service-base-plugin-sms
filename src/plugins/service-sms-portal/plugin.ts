@@ -5,6 +5,7 @@ import {
 } from "@bettercorp/service-base";
 import { MyPluginConfig } from "./sec.config";
 import { Axios, AxiosResponse } from "axios";
+import { Tools } from "@bettercorp/tools";
 
 const SMS_PORTAL_API = "https://rest.smsportal.com";
 
@@ -95,6 +96,9 @@ export class Service extends ServicesBase<
           Buffer.from(apiKey + ":" + apiSecret, "utf-8").toString("base64"),
       },
     });
+    if (Tools.isString(authResponse.data))
+      authResponse.data = JSON.parse(authResponse.data);
+
     this.tokenCache.push({
       token: authResponse.data.token,
       apiKey,
@@ -109,6 +113,8 @@ export class Service extends ServicesBase<
       "sendSMS",
       async (apiKey: string, apiSecret: string, messages: Array<IMessage>) => {
         const authToken = await self.getToken(apiKey, apiSecret);
+        if (Tools.isNullOrUndefined(authToken)) throw "invalid credentials";
+
         const messageResponse = await self.axios.post<
           any,
           AxiosResponse<SMSResponse>
@@ -119,7 +125,7 @@ export class Service extends ServicesBase<
           }),
           {
             headers: {
-              Authorization: authToken,
+              Authorization: `Bearer ${authToken}`,
               "Content-Type": "application/json",
             },
           }

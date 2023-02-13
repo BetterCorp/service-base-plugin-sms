@@ -5,11 +5,10 @@
     "url": "https://github.com/BetterCorp/service-base-plugin-sms"
   },
   "scripts": {
-    "dev": "nodemon -L --watch src/**/*.ts --watch plugins/**/*.ts --exec ts-node src/index.ts",
-    "start": "node lib/index.js",
     "build": "tsc",
-    "deploy": "npm publish",
-    "xpostinstall": "node ../service-base/install-plugin.js"
+    "dev": "nodemon --config node_modules/@bettercorp/service-base/development/nodemon.json",
+    "start": "ts-node node_modules/@bettercorp/service-base/lib/cli.js",
+    "postinstall": "node scripts/install.js"
   },
   "files": [
     "lib/**/*"
@@ -19,12 +18,13 @@
   "devDependencies": {
     "ts-node": "^10.9.1",
     "tslint": "^6.1.3",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5"
   },
+  "bsb_project": true,
   "dependencies": {
-    "@bettercorp/service-base": "^8.3.17",
-    "@bettercorp/tools": "^2.1.26",
-    "@types/node": "^18.11.18",
-    "axios": "^1.2.5"
+    "@bettercorp/service-base": "^8.3.19",
+    "@bettercorp/tools": "^2.1.28",
+    "@types/node": "^18.13.0",
+    "axios": "^1.3.2"
   }
 }
